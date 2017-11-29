@@ -1,7 +1,15 @@
 package com.example.im.music;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -14,18 +22,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static com.example.im.music.R.layout.listview;
 
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    Button play;
     ListView playList;
+    MediaPlayer mp;
     ProgressDialog progressDialog;
+    ArrayList<HashMap<String, String>> songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +48,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        playList=(ListView)findViewById(R.id.playList);
+        playList = (ListView) findViewById(R.id.playList);
+        play = (Button) findViewById(R.id.play);
+        play.setOnClickListener(this);
+        mp = MediaPlayer.create(this, R.raw.barish);
 
-        ArrayList<String> songs=new ArrayList<>();
-        ArrayList<HashMap<String, String>> songList = getPlayList("/storage/emulated/");
-        if (songList != null) {
-            for (int i = 0; i < songList.size(); i++) {
-                String fileName = songList.get(i).get("file_name");
-                String filePath = songList.get(i).get("file_path");
-                //here you will get list of file name and file path that present in your device
-                Log.i("file details ", " name =" + fileName + " path = " + filePath);
-                songs.add(i,fileName);
-            }
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1,songs );
-
-
-        // Assign adapter to ListView
-        playList.setAdapter(adapter);
+        //Executing task in background(Updating Music Library).
+        (new MyTask()).execute();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +132,59 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //AsyncTask
+    class MyTask extends AsyncTask<Integer, Integer, String> {
+        //to do task in Background.
+        @Override
+        protected String doInBackground(Integer... params) {
+            songList = getPlayList("/storage/ext_sd/");
+            return "1";
+        }
+
+        //When the task is background is done(In this case updating Music Library).
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            final ArrayList<String> songs = new ArrayList<>();
+            final ArrayList<String> path = new ArrayList<>();
+            if (songList != null) {
+                for (int i = 0; i < songList.size(); i++) {
+                    String fileName = songList.get(i).get("file_name");
+                    String filePath = songList.get(i).get("file_path");
+                    //here you will get list of file name and file path that present in your device
+                    Log.i("file details ", " name =" + fileName + " path = " + filePath);
+                    songs.add(i, fileName);
+                    path.add(i, filePath);
+                }
+            }
+            //Setting Adapter  on ListView.
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
+                    listview, R.id.name, songs);
+
+            // Assign adapter to ListView
+            playList.setAdapter(adapter);
+//            Checking If item on ListView is Clicked And performing Required Function.
+            playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    String name = (String) adapterView.getItemAtPosition(i);
+                    Toast.makeText(getApplicationContext(), "PLaying : " + name, Toast.LENGTH_SHORT).show();
+                    Uri paths = Uri.parse(path.get(i));
+                    mp.stop();
+                    mp = MediaPlayer.create(MainActivity.this, paths);
+                    mp.start();
+                }
+            });
+        }
+
+        //Before the task(Music Library is updated)is executed.
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(MainActivity.this, "", "Updating Music Library...", true);
+        }
+    }
+
+    //Function to get All the Mp3 files from directory.
     ArrayList<HashMap<String, String>> getPlayList(String rootPath) {
         ArrayList<HashMap<String, String>> fileList = new ArrayList<>();
 
@@ -153,6 +209,56 @@ public class MainActivity extends AppCompatActivity
             return fileList;
         } catch (Exception e) {
             return null;
+        }
+    }
+//     D
+//    public void getMp3Songs() {
+//
+//        Uri allsongsuri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+//        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+//        Cursor cursor;
+//        cursor = managedQuery(allsongsuri, STAR, selection, null, null);
+//
+//        if (cursor != null) {
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    song_name = cursor
+//                            .getString(cursor
+//                                    .getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
+//                    int song_id = cursor.getInt(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media._ID));
+//
+//                    String fullpath = cursor.getString(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media.DATA));
+//                    fullsongpath.add(fullpath);
+//
+//                    album_name = cursor.getString(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media.ALBUM));
+//                    int album_id = cursor.getInt(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+//
+//                    artist_name = cursor.getString(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media.ARTIST));
+//                    int artist_id = cursor.getInt(cursor
+//                            .getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+//
+//
+//                } while (cursor.moveToNext());
+//
+//            }
+//            cursor.close();
+//            db.closeDatabase();
+//        }
+//    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.play: {
+                mp.stop();
+            }
+
         }
     }
 }
