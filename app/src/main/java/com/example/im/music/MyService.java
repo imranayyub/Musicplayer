@@ -14,10 +14,11 @@ import java.util.ArrayList;
  */
 
 public class MyService extends Service {
-    public MediaPlayer player;
-    String song;
-    ArrayList songs = new ArrayList<>();
-    int positions;
+    public static MediaPlayer player;
+    ArrayList songPath = new ArrayList<>();
+    ArrayList songName = new ArrayList<>();
+    int position;
+
     @Override
     public IBinder onBind(Intent intent) {
 
@@ -27,44 +28,62 @@ public class MyService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         onTaskRemoved(intent);
+
         if (intent != null && intent.getExtras() != null) {
             if (player != null)
                 player.stop();
             Bundle bundle = intent.getExtras();
-            song = bundle.getString("Song");
-
-//            songs=bundle.getStringArrayList("SongList");
-//            String position=bundle.getString("position");
-//             positions=Integer.parseInt(position);
-            Uri sing = Uri.parse(song);
+            songPath = bundle.getStringArrayList("SongList");
+            position = bundle.getInt("position");
+            songName=bundle.getStringArrayList("SongName");
+            Uri sing = Uri.parse((String) songPath.get(position));
             player = MediaPlayer.create(this, sing);
-            player.setLooping(true);
             player.start();
-//            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                @Override
-//                public void onCompletion(MediaPlayer player) {
-//                    onNextClicked(mp);
-//                    positions++;
-//                    Uri sing = Uri.parse((String) songs.get(positions));
-//                    player = MediaPlayer.create(MyService.this, sing);
-//            player.setLooping(true);
-//                    player.start();
-//                }
-//            });
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer play) {
+                    position++;
+                    if(position>=songPath.size())
+                        position=0;
+                    if (player != null)
+                        player.stop();
+                    Uri sing = Uri.parse((String) songPath.get(position));
+                    player = MediaPlayer.create(MyService.this, sing);
+                    MainActivity.customBigNotification(getApplicationContext(), (String) songName.get(position));
+                    player.setOnCompletionListener(this);
+                    player.start();
+                }
+            });
         }
         return START_STICKY;
     }
+
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Intent intent=new Intent(getApplicationContext(),this.getClass());
+        Intent intent = new Intent(getApplicationContext(), this.getClass());
         intent.setPackage(getPackageName());
         startService(intent);
         super.onTaskRemoved(rootIntent);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (player != null)
             player.stop();
+    }
+    public static void pause()
+    {
+        if(player.isPlaying())
+        {
+            player.pause();
+        }
+    }
+    public static void play()
+    {
+        if(!player.isPlaying())
+        {
+            player.start();
+        }
     }
 }
