@@ -7,13 +7,16 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/music1"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        />
 <TextView
     android:elevation="70dp"
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:text="name"
-    android:layout_marginLeft="25dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="25dp"
     android:textAlignment="gravity"
     android:id="@+id/name"
     android:layout_gravity="center"
