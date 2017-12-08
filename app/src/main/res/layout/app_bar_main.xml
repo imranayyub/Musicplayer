@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/black"
-            app:popupTheme="@style/AppTheme.PopupOverlay"         />
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -27,8 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-       android:layout_marginBottom="32dp"
+        android:layout_marginBottom="32dp"
         android:layout_marginRight="10dp"
+        app:backgroundTint="#61000000"
         app:fabSize="mini"
         app:srcCompat="@android:drawable/ic_menu_rotate" />
 

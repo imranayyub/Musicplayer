@@ -4,10 +4,15 @@ import android.app.DialogFragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,20 +33,20 @@ public class SongDetailDialogFragment extends DialogFragment implements View.OnC
 
     ImageView image;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Inflating the dialogfragment layout
         View rootView = inflater.inflate(R.layout.songdetail_dialog, container, false);
         name1 = (TextView) rootView.findViewById(R.id.name1);
-//        image=(ImageView)rootView.findViewById(R.id.image);
+        image=(ImageView)rootView.findViewById(R.id.image1);
+
         back = (Button) rootView.findViewById(R.id.back);
         back.setOnClickListener(this); //setting OnClickListener on Back Button.
-//        Uri uri = Uri.parse(SongDetails.getAlbumArt());
-//        Glide.with(getActivity()).load(uri)
-//                .thumbnail(0.5f)
-//                .crossFade()
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .into(image);
+
+        getDialog().setTitle("Song Details :"); //Sets title of Dialog Fragment.
+        getDialog().setCancelable(false);
+//        getDialog().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,R.drawable.album_art);
         //Converting Duration in Proper time Format.
         long duration = Long.parseLong(SongDetails.getDuration());
         hours = (duration / 3600000);
@@ -63,8 +68,6 @@ public class SongDetailDialogFragment extends DialogFragment implements View.OnC
         bitrate = separated[0];
         if (bitrate.equals("32"))
             bitrate = "320";
-        getDialog().setTitle("Song Details :"); //Sets title of Dialog Fragment.
-        getDialog().setCancelable(false);
 
         artist = SongDetails.getArtist();
         if (artist == null)
@@ -80,21 +83,29 @@ public class SongDetailDialogFragment extends DialogFragment implements View.OnC
             name = SongDetails.getName();
         //Displaying data in TextView of DialogFragment.
         name1.setText("Name : " + name
-                + "\nPath : " + SongDetails.getPath()
-                + "\nArtist : " + artist
-                + "\nAlbum : " + album
-                + "\nDuration : " + time
-                + "\nGenre : " + genre
-                + "\nBitrate : " + bitrate + " kbps");
+                + "\n\nPath : " + SongDetails.getPath()
+                + "\n\nArtist : " + artist
+                + "\n\nAlbum : " + album
+                + "\n\nDuration : " + time
+                + "\n\nGenre : " + genre
+                + "\n\nBitrate : " + bitrate + " kbps");
 
-//        albumart = SongDetails.getAlbumArt();
-//        if (albumart != null) {
-//            byte[] imag = albumart.getBytes();
-//            Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
+        //Displays embedded Byte image into Image View.
+        albumart = SongDetails.getAlbumArt();
+        int width=120,height=120;
+        if (albumart !="") {
+            byte[] imag = Base64.decode(albumart,Base64.DEFAULT);
+            try {
+                Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
 //
-//            image.setImageBitmap(Bitmap.createScaledBitmap(bmp, image.getWidth(),
-//                    image.getHeight(), false));
-//        }
+                image.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
+                        height, false));
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e("Excetion ",e.toString());
+            }
+        }
         return rootView;
     }
 

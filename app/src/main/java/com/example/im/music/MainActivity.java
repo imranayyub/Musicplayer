@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -24,6 +25,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -36,6 +38,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     Bundle bundle = new Bundle();
     FragmentManager manager = getFragmentManager();
     SongDetailDialogFragment dialog = new SongDetailDialogFragment();
+//    ImageView images;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        images = (ImageView) findViewById(R.id.images);
+
 
         playList = (ListView) findViewById(R.id.playList);
         play = (Button) findViewById(R.id.play);
@@ -178,8 +185,8 @@ public class MainActivity extends AppCompatActivity
             if (songList != null) {
                 for (int i = 0; i < songList.size() / 2; i++) {
                     String fileName = songList.get(i).get("songtitle");
-                    if(fileName==null)
-                        fileName=songList.get(i).get("file_name");
+                    if (fileName == null)
+                        fileName = songList.get(i).get("file_name");
                     String filePath = songList.get(i).get("file_path");
                     //here you will get list of file name and file path that present in your device
                     Log.i("file details ", " name =" + fileName + " path = " + filePath);
@@ -193,7 +200,8 @@ public class MainActivity extends AppCompatActivity
 
             // Assign adapter to ListView
             playList.setAdapter(adapter);
-//            Checks If item on ListView is Clicked And performs Required Function.
+            registerForContextMenu(playList);
+//   Checks If item on ListView is Clicked And performs Required Function.
             playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                 @Override
@@ -218,9 +226,15 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+
+
             playList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                    onCreateContextMenu(menu, v, menuInfo);
+
+
+
                     String name = (String) adapterView.getItemAtPosition(position);
                     SongDetails.setName(name);
                     SongDetails.setBitrate(songList.get(position).get("bitrate"));
@@ -232,9 +246,9 @@ public class MainActivity extends AppCompatActivity
                     SongDetails.setAlbumArt(songList.get(position).get("albumart"));
                     SongDetails.setTitle(songList.get(position).get("songtitle"));
                     Toast.makeText(getApplicationContext(), "Long Pressed : " + name, Toast.LENGTH_SHORT).show();
-
-                    dialog.show(manager, "YourDialog");
-
+//
+//                    dialog.show(manager, "YourDialog");
+//
                     return false;
                 }
             });
@@ -273,16 +287,21 @@ public class MainActivity extends AppCompatActivity
                         song.put("genre", mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
                         song.put("bitrate", mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
                         byte[] image = mediaMetadataRetriever.getEmbeddedPicture();
-
+//                        if (image != null) {
+//                            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+//////
+//                            images.setImageBitmap(Bitmap.createScaledBitmap(bmp, images.getWidth(),
+//                                    images.getHeight(), false));
+//                        }
                         String albumArt = "";
                         Uri uri = null;
                         if (image != null) {
                             albumArt = Base64.encodeToString(image, Base64.DEFAULT);
-                            uri = Uri.parse(albumArt);
+//                            uri = Uri.parse(albumArt);
                         }
-                        Log.d("log", "bitrate" + mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM));
+                        Log.d("log", "bitrate" + image);
 //                        Log.d("Image : ", uri);
-                        song.put("albumart", String.valueOf(image));
+                        song.put("albumart", albumArt);
 //                        System.out.println(uri);
                         fileList.add(song);
                     }
@@ -294,6 +313,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Options: ");
+        menu.add(0, v.getId(), 0, "Add to Playlist");//groupId, itemId, order, title
+        menu.add(0, v.getId(), 0, "Details");
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        if(item.getTitle()=="Add to Playlist"){
+            Toast.makeText(getApplicationContext(),"Adding to Playlist..",Toast.LENGTH_LONG).show();
+        }
+        else if(item.getTitle()=="Details"){
+            Toast.makeText(getApplicationContext(),"Song Details..",Toast.LENGTH_LONG).show();
+            dialog.show(manager, "YourDialog");
+        }else{
+            return false;
+        }
+        return true;
+    }
     @Override
     public void onClick(View v) {
         int id = v.getId();
