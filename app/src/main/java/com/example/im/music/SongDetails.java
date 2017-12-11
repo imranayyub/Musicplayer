@@ -1,91 +1,109 @@
 package com.example.im.music;
 
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 /**
  * Created by Im on 06-12-2017.
  */
 
 //Model Class to Get and Set data for DetailDialogFragment.
+@Table(database = Appdatabase.class)
+public class SongDetails extends BaseModel {
 
-public class SongDetails {
-    static String name;
-    static String artist;
-    static String duration;
-    static String album;
-    static String genre;
-    static String bitrate;
-    static String path;
-    static String albumArt;
-    static String title;
+    @PrimaryKey(autoincrement = true) // at least one primary key required
+            int id;
 
-    public static void setTitle(String title) {
-        SongDetails.title = title;
+    @Column
+     String name;
+    @Column
+     String artist;
+    @Column
+     String duration;
+    @Column
+     String album;
+    @Column
+     String genre;
+    @Column
+     String bitrate;
+        @Column
+     String path;
+        @Column
+     String albumArt;
+        @Column
+     String title;
+
+    public  void setTitle(String title) {
+       this.title = title;
     }
 
-    public static void setName(String name) {
-        SongDetails.name = name;
+    public  void setName(String name) {
+        this.name = name;
     }
 
-    public static String getName() {
+    public  String getName() {
         return name;
     }
 
-    public static String getArtist() {
+    public  String getArtist() {
         return artist;
     }
 
-    public static String getDuration() {
+    public  String getDuration() {
         return duration;
     }
 
-    public static String getAlbum() {
+    public  String getAlbum() {
         return album;
     }
 
-    public static String getGenre() {
+    public  String getGenre() {
         return genre;
     }
 
-    public static String getBitrate() {
+    public  String getBitrate() {
         return bitrate;
     }
 
-    public static void setArtist(String artist) {
-        SongDetails.artist = artist;
+    public  void setArtist(String artist) {
+        this.artist = artist;
     }
 
-    public static void setDuration(String duration) {
-        SongDetails.duration = duration;
+    public  void setDuration(String duration) {
+     this.duration = duration;
     }
 
-    public static void setAlbum(String album) {
-        SongDetails.album = album;
+    public  void setAlbum(String album) {
+     this.album = album;
     }
 
-    public static void setGenre(String genre) {
-        SongDetails.genre = genre;
+    public  void setGenre(String genre) {
+     this.genre = genre;
     }
 
-    public static void setBitrate(String bitrate) {
-        SongDetails.bitrate = bitrate;
+    public  void setBitrate(String bitrate) {
+     this.bitrate = bitrate;
     }
 
-    public static String getPath() {
+    public  String getPath() {
         return path;
     }
 
-    public static void setPath(String path) {
-        SongDetails.path = path;
+    public  void setPath(String path) {
+        this.path = path;
     }
 
-    public static String getAlbumArt() {
+    public  String getAlbumArt() {
         return albumArt;
     }
 
-    public static void setAlbumArt(String albumArt) {
-        SongDetails.albumArt = albumArt;
+    public  void setAlbumArt(String albumArt) {
+        this.albumArt = albumArt;
     }
 
-    public static String getTitle() {
+    public  String getTitle() {
         return title;
     }
 }

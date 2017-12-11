@@ -35,6 +35,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -44,6 +45,8 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 import android.widget.Button;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
+
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -52,6 +55,7 @@ import java.util.HashMap;
 import static com.example.im.music.R.layout.big_notification;
 import static com.example.im.music.R.layout.design_layout_tab_icon;
 import static com.example.im.music.R.layout.listview;
+import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     Bundle bundle = new Bundle();
     FragmentManager manager = getFragmentManager();
     SongDetailDialogFragment dialog = new SongDetailDialogFragment();
+    SongDetails songDetails = new SongDetails();
 //    ImageView images;
 
     @Override
@@ -134,9 +139,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -181,6 +186,7 @@ public class MainActivity extends AppCompatActivity
             progressDialog.dismiss();
             final ArrayList<String> songs = new ArrayList<>();
             final ArrayList<String> songPath = new ArrayList<>();
+//            final ArrayList<String> songart = new ArrayList<>();
 
             if (songList != null) {
                 for (int i = 0; i < songList.size() / 2; i++) {
@@ -188,10 +194,26 @@ public class MainActivity extends AppCompatActivity
                     if (fileName == null)
                         fileName = songList.get(i).get("file_name");
                     String filePath = songList.get(i).get("file_path");
+//                    String songarts = songList.get(i).get("albumart");
                     //here you will get list of file name and file path that present in your device
                     Log.i("file details ", " name =" + fileName + " path = " + filePath);
                     songs.add(i, fileName);
                     songPath.add(i, filePath);
+//                    songart.add(i,songarts);
+
+//                    songDetails.setName(fileName);
+//                    songDetails.setBitrate(songList.get(i).get("bitrate"));
+//                    songDetails.setDuration(songList.get(i).get("duration"));
+//                    songDetails.setAlbum(songList.get(i).get("album"));
+//                    songDetails.setGenre(songList.get(i).get("genre"));
+//                    songDetails.setArtist(songList.get(i).get("artist"));
+//                    songDetails.setPath(songList.get(i).get("file_path"));
+//                    songDetails.setAlbumArt(songList.get(i).get("albumart"));
+//                    songDetails.setTitle(songList.get(i).get("songtitle"));
+//                    songDetails.save();
+//                    songDetails.insert();
+//                    long numpoints = new Select().from(SongDetails.class).count();
+//                    Log.d("NO OF ROWS :", String.valueOf(numpoints));
                 }
             }
             //Setting Adapter  on ListView.
@@ -208,19 +230,20 @@ public class MainActivity extends AppCompatActivity
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     String name = (String) adapterView.getItemAtPosition(position);
                     Toast.makeText(getApplicationContext(), "Playing : " + name, Toast.LENGTH_SHORT).show();
-
-                    //Showing Custom Notification with Control Button
-                    createNotification(getApplicationContext(), name);
+//                    SongDetails songDetails=new SongDetails();
+                    songDetails.setAlbumArt(songList.get(position).get("albumart"));
+//                    Showing Custom Notification with Control Button
+                    createNotification(getApplicationContext(), name, songDetails.getAlbumArt());
 
                     play.setText("Pause");
                     Activated = 1;
 
                     //Intent to Start Service(Service to play Music in Background).
                     Intent intent = new Intent(MainActivity.this, MyService.class);
-
                     intent.putStringArrayListExtra("SongList", songPath);
                     intent.putStringArrayListExtra("SongName", songs);
                     bundle.putInt("position", position);
+                    bundle.putString("albumart",songDetails.getAlbumArt());
                     intent.putExtras(bundle);
                     startService(intent);
 
@@ -233,20 +256,22 @@ public class MainActivity extends AppCompatActivity
                 public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
 //                    onCreateContextMenu(menu, v, menuInfo);
 
-
-
+                    long numpoints = new Select().from(SongDetails.class).count();
+                    Log.d("NO OF ROWS :", String.valueOf(numpoints));
+                    songDetails.delete();
                     String name = (String) adapterView.getItemAtPosition(position);
-                    SongDetails.setName(name);
-                    SongDetails.setBitrate(songList.get(position).get("bitrate"));
-                    SongDetails.setDuration(songList.get(position).get("duration"));
-                    SongDetails.setAlbum(songList.get(position).get("album"));
-                    SongDetails.setGenre(songList.get(position).get("genre"));
-                    SongDetails.setArtist(songList.get(position).get("artist"));
-                    SongDetails.setPath(songList.get(position).get("file_path"));
-                    SongDetails.setAlbumArt(songList.get(position).get("albumart"));
-                    SongDetails.setTitle(songList.get(position).get("songtitle"));
+                    songDetails.setName(name);
+                    songDetails.setBitrate(songList.get(position).get("bitrate"));
+                    songDetails.setDuration(songList.get(position).get("duration"));
+                    songDetails.setAlbum(songList.get(position).get("album"));
+                    songDetails.setGenre(songList.get(position).get("genre"));
+                    songDetails.setArtist(songList.get(position).get("artist"));
+                    songDetails.setPath(songList.get(position).get("file_path"));
+                    songDetails.setAlbumArt(songList.get(position).get("albumart"));
+                    songDetails.setTitle(songList.get(position).get("songtitle"));
+                    songDetails.save();
                     Toast.makeText(getApplicationContext(), "Long Pressed : " + name, Toast.LENGTH_SHORT).show();
-//
+
 //                    dialog.show(manager, "YourDialog");
 //
                     return false;
@@ -287,23 +312,14 @@ public class MainActivity extends AppCompatActivity
                         song.put("genre", mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
                         song.put("bitrate", mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
                         byte[] image = mediaMetadataRetriever.getEmbeddedPicture();
-//                        if (image != null) {
-//                            Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-//////
-//                            images.setImageBitmap(Bitmap.createScaledBitmap(bmp, images.getWidth(),
-//                                    images.getHeight(), false));
-//                        }
                         String albumArt = "";
-                        Uri uri = null;
                         if (image != null) {
                             albumArt = Base64.encodeToString(image, Base64.DEFAULT);
-//                            uri = Uri.parse(albumArt);
                         }
                         Log.d("log", "bitrate" + image);
-//                        Log.d("Image : ", uri);
                         song.put("albumart", albumArt);
-//                        System.out.println(uri);
                         fileList.add(song);
+
                     }
                 }
             }
@@ -314,26 +330,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
-    {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Options: ");
         menu.add(0, v.getId(), 0, "Add to Playlist");//groupId, itemId, order, title
         menu.add(0, v.getId(), 0, "Details");
     }
+
     @Override
-    public boolean onContextItemSelected(MenuItem item){
-        if(item.getTitle()=="Add to Playlist"){
-            Toast.makeText(getApplicationContext(),"Adding to Playlist..",Toast.LENGTH_LONG).show();
-        }
-        else if(item.getTitle()=="Details"){
-            Toast.makeText(getApplicationContext(),"Song Details..",Toast.LENGTH_LONG).show();
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Add to Playlist") {
+            Toast.makeText(getApplicationContext(), "Adding to Playlist..", Toast.LENGTH_LONG).show();
+        } else if (item.getTitle() == "Details") {
+            Toast.makeText(getApplicationContext(), "Song Details..", Toast.LENGTH_LONG).show();
             dialog.show(manager, "YourDialog");
-        }else{
+        } else {
             return false;
         }
         return true;
     }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -363,7 +379,7 @@ public class MainActivity extends AppCompatActivity
     Button close;
     private static final int NOTIFICATION_ID_CUSTOM_BIG = 9;
 
-    public static void createNotification(Context context, String name) {
+    public static void createNotification(Context context, String name, String art) {
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), big_notification);
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -380,10 +396,25 @@ public class MainActivity extends AppCompatActivity
         notificationCompat.getBigContentView().setTextViewText(R.id.textSongName, name);
 //          close=(Button)expandedView.findViewById(R.id.btnDelete);
 //        setListeners(expandedView, context);
+//        int width = 120, height = 120;
+        if (art != null) {
+            byte[] imag = Base64.decode(art, Base64.DEFAULT);
+            try {
+                Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
+                notificationCompat.getBigContentView().setImageViewBitmap(R.id.albumart, bmp);
+//                albumart.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
+//                        height, false));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception ", e.toString());
+            }
+            if (art == "") {
+                notificationCompat.getBigContentView().setImageViewResource(R.id.albumart, R.drawable.album_art);
+            }
+            notificationManager.notify(NOTIFICATION_ID_CUSTOM_BIG, notificationCompat.build());
 
-        notificationManager.notify(NOTIFICATION_ID_CUSTOM_BIG, notificationCompat.build());
 
+        }
 
     }
-
 }

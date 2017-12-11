@@ -18,8 +18,10 @@ public class MyService extends Service {
     public static MediaPlayer player;
     ArrayList songPath = new ArrayList<>();
     ArrayList songName = new ArrayList<>();
+//    ArrayList songart = new ArrayList<>();
     int position;
     int duration;
+    String albumArt;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -39,7 +41,9 @@ public class MyService extends Service {
             songPath = bundle.getStringArrayList("SongList");
             position = bundle.getInt("position");
             songName = bundle.getStringArrayList("SongName");
-            Uri sing = Uri.parse((String) songPath.get(position)); //Conveting String path into Uri.
+            albumArt=bundle.getString("albumart");
+//            songart = bundle.getStringArrayList("albumart");
+            Uri sing = Uri.parse((String) songPath.get(position)); //Converting String path into Uri.
             player = MediaPlayer.create(this, sing);
             player.start();  //playing Song Using MediaPlayer.
             //checks if the Songs is over(Here we play next Song if previous is over).
@@ -53,7 +57,7 @@ public class MyService extends Service {
                         player.stop();
                     Uri sing = Uri.parse((String) songPath.get(position));
                     player = MediaPlayer.create(MyService.this, sing);
-                    MainActivity.createNotification(getApplicationContext(), (String) songName.get(position));  //shows Notification each time new song is played.
+                    MainActivity.createNotification(getApplicationContext(), (String) songName.get(position), albumArt);  //shows Notification each time new song is played.
                     player.setOnCompletionListener(this);
                     player.start();
                 }
