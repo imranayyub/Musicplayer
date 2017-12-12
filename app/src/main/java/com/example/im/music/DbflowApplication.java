@@ -16,7 +16,7 @@ public class DbflowApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Timber.plant(new Timber.DebugTree());
+//        Timber.plant(new Timber.DebugTree());
         FlowManager.init(this);
     }
 
