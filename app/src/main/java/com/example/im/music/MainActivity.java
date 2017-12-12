@@ -1,6 +1,7 @@
 package com.example.im.music;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -45,6 +46,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 import android.widget.Button;
 
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.io.File;
@@ -59,6 +61,7 @@ import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
     //Defining Variables.
     Button play, stop;
     ListView playList;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     Bundle bundle = new Bundle();
     FragmentManager manager = getFragmentManager();
     SongDetailDialogFragment dialog = new SongDetailDialogFragment();
-    SongDetails songDetails = new SongDetails();
+//    SongDetails songDetails = new SongDetails();
 //    ImageView images;
 
     @Override
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity
             progressDialog.dismiss();
             final ArrayList<String> songs = new ArrayList<>();
             final ArrayList<String> songPath = new ArrayList<>();
-//            final ArrayList<String> songart = new ArrayList<>();
+            final ArrayList<String> songart = new ArrayList<>();
 
             if (songList != null) {
                 for (int i = 0; i < songList.size() / 2; i++) {
@@ -194,12 +197,12 @@ public class MainActivity extends AppCompatActivity
                     if (fileName == null)
                         fileName = songList.get(i).get("file_name");
                     String filePath = songList.get(i).get("file_path");
-//                    String songarts = songList.get(i).get("albumart");
+                    String songarts = songList.get(i).get("albumart");
                     //here you will get list of file name and file path that present in your device
                     Log.i("file details ", " name =" + fileName + " path = " + filePath);
                     songs.add(i, fileName);
                     songPath.add(i, filePath);
-//                    songart.add(i,songarts);
+                    songart.add(i, songarts);
 
 //                    songDetails.setName(fileName);
 //                    songDetails.setBitrate(songList.get(i).get("bitrate"));
@@ -216,13 +219,14 @@ public class MainActivity extends AppCompatActivity
 //                    Log.d("NO OF ROWS :", String.valueOf(numpoints));
                 }
             }
+
             //Setting Adapter  on ListView.
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
-                    listview, R.id.name, songs);
+            CustomAdapterforList adapter = new CustomAdapterforList(MainActivity.this, songart, songs);
 
             // Assign adapter to ListView
             playList.setAdapter(adapter);
             registerForContextMenu(playList);
+
 //   Checks If item on ListView is Clicked And performs Required Function.
             playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -230,10 +234,11 @@ public class MainActivity extends AppCompatActivity
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     String name = (String) adapterView.getItemAtPosition(position);
                     Toast.makeText(getApplicationContext(), "Playing : " + name, Toast.LENGTH_SHORT).show();
-//                    SongDetails songDetails=new SongDetails();
-                    songDetails.setAlbumArt(songList.get(position).get("albumart"));
+
+//                    songDetails.setAlbumArt(songList.get(position).get("albumart"));
+
 //                    Showing Custom Notification with Control Button
-                    createNotification(getApplicationContext(), name, songDetails.getAlbumArt());
+//                    createNotification(getApplicationContext(), name, songDetails.getAlbumArt());
 
                     play.setText("Pause");
                     Activated = 1;
@@ -243,7 +248,13 @@ public class MainActivity extends AppCompatActivity
                     intent.putStringArrayListExtra("SongList", songPath);
                     intent.putStringArrayListExtra("SongName", songs);
                     bundle.putInt("position", position);
-                    bundle.putString("albumart",songDetails.getAlbumArt());
+//                    try {
+//                        intent.putStringArrayListExtra("songart", songart);
+//                    }catch (Exception e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                    bundle.putString("albumart", songDetails.getAlbumArt());
                     intent.putExtras(bundle);
                     startService(intent);
 
@@ -256,10 +267,11 @@ public class MainActivity extends AppCompatActivity
                 public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
 //                    onCreateContextMenu(menu, v, menuInfo);
 
-                    long numpoints = new Select().from(SongDetails.class).count();
-                    Log.d("NO OF ROWS :", String.valueOf(numpoints));
-                    songDetails.delete();
+                    long songCount = SQLite.select().from(SongDetails.class).count();//new Select().from(SongDetails.class).count();
+                    Log.d("NO OF ROWS :", String.valueOf(songCount));
+//                    songDetails.delete();
                     String name = (String) adapterView.getItemAtPosition(position);
+                   SongDetails songDetails=new SongDetails();
                     songDetails.setName(name);
                     songDetails.setBitrate(songList.get(position).get("bitrate"));
                     songDetails.setDuration(songList.get(position).get("duration"));
@@ -269,6 +281,7 @@ public class MainActivity extends AppCompatActivity
                     songDetails.setPath(songList.get(position).get("file_path"));
                     songDetails.setAlbumArt(songList.get(position).get("albumart"));
                     songDetails.setTitle(songList.get(position).get("songtitle"));
+                    songDetails.insert();
                     songDetails.save();
                     Toast.makeText(getApplicationContext(), "Long Pressed : " + name, Toast.LENGTH_SHORT).show();
 
@@ -356,6 +369,9 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.stop: {
                 stopService(new Intent(MainActivity.this, MyService.class));
+                play.setText("play");
+                Activated=1;
+                break;
             }
             case R.id.play: {
 
@@ -377,44 +393,72 @@ public class MainActivity extends AppCompatActivity
 
 
     Button close;
-    private static final int NOTIFICATION_ID_CUSTOM_BIG = 9;
+//    private static final int NOTIFICATION_ID_CUSTOM_BIG = 9;
+//
+//    public static void createNotification(Context context, String name, String art) {
+//        RemoteViews expandedView = new RemoteViews(context.getPackageName(), big_notification);
+//        NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context);
+//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+//        Intent notifyIntent = new Intent(context, MainActivity.class);
+//        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        PendingIntent pause = PendingIntent.getActivity(context, 0, notifyIntent, 0);
+//        PendingIntent close = PendingIntent.getActivity(context, 0, notifyIntent, 0);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        notificationCompat.setContentIntent(pendingIntent);
+//        notificationCompat.setSmallIcon(R.drawable.ic_action_play);
+//        notificationCompat.setAutoCancel(false);
+//        notificationCompat.setCustomBigContentView(expandedView);
+//        notificationCompat.setContentTitle("Music Player");
+//        notificationCompat.setContentText("Control Audio");
+//        notificationCompat.getBigContentView().setTextViewText(R.id.textSongName, name);
+//        notificationCompat.addAction(R.id.btnPause, "Pause", pause);
+//        notificationCompat.addAction(R.id.btnDelete,"close",close);
+//        notificationCompat.setOngoing(true);
+//
+////        notificationCompat.build().flags |= Notification.FLAG_NO_CLEAR |Notification.FLAG_ONGOING_EVENT;
+////          Button close=(Button)expandedView.findViewById(R.id.btnDelete);
+////        setListeners(expandedView, context);
+//
+//
+//        if (art != null) {
+//            byte[] imag = Base64.decode(art, Base64.DEFAULT);
+//            try {
+//                Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
+//                notificationCompat.getBigContentView().setImageViewBitmap(R.id.albumart, bmp);
+////                albumart.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
+////                        height, false));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+////                notificationCompat.getBigContentView().getLayoutParams().height = 120;
+////                image.getLayoutParams().width = 120;
+//                Log.e("Exception ", e.toString());
+//            }
+//            if (art == "" || art == null) {
+//                notificationCompat.getBigContentView().setImageViewResource(R.id.albumart, R.drawable.album_art);
+//            }
+//            notificationManager.notify(NOTIFICATION_ID_CUSTOM_BIG, notificationCompat.build());
+//
+//
+//        }
+//
+//    }
 
-    public static void createNotification(Context context, String name, String art) {
-        RemoteViews expandedView = new RemoteViews(context.getPackageName(), big_notification);
-        NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notifyIntent = new Intent(context, MainActivity.class);
-
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notificationCompat.setContentIntent(pendingIntent);
-        notificationCompat.setSmallIcon(R.drawable.ic_action_play);
-        notificationCompat.setAutoCancel(false);
-        notificationCompat.setCustomBigContentView(expandedView);
-        notificationCompat.setContentTitle("Music Player");
-        notificationCompat.setContentText("Control Audio");
-        notificationCompat.getBigContentView().setTextViewText(R.id.textSongName, name);
-//          close=(Button)expandedView.findViewById(R.id.btnDelete);
-//        setListeners(expandedView, context);
-//        int width = 120, height = 120;
-        if (art != null) {
-            byte[] imag = Base64.decode(art, Base64.DEFAULT);
-            try {
-                Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
-                notificationCompat.getBigContentView().setImageViewBitmap(R.id.albumart, bmp);
-//                albumart.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
-//                        height, false));
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("Exception ", e.toString());
-            }
-            if (art == "") {
-                notificationCompat.getBigContentView().setImageViewResource(R.id.albumart, R.drawable.album_art);
-            }
-            notificationManager.notify(NOTIFICATION_ID_CUSTOM_BIG, notificationCompat.build());
-
-
+    @Override
+    protected void onDestroy() {
+        if(!isMyServiceRunning(MyService.class)) {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancelAll();
         }
+        super.onDestroy();
+    }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

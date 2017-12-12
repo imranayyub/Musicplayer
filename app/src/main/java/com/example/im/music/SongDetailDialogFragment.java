@@ -98,7 +98,7 @@ public class SongDetailDialogFragment extends DialogFragment implements View.OnC
         //Displays embedded Byte image into Image View.
         albumart = song.getAlbumArt();
         int width = 120, height = 120;
-        if (albumart != "") {
+        if (albumart != "" && albumart !=null) {
             byte[] imag = Base64.decode(albumart, Base64.DEFAULT);
             try {
                 Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
@@ -106,10 +106,14 @@ public class SongDetailDialogFragment extends DialogFragment implements View.OnC
                 image.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
                         height, false));
             } catch (Exception e) {
+                image.getLayoutParams().height = 120;
+                image.getLayoutParams().width = 120;
+                image.setImageResource(R.drawable.album_art);
                 e.printStackTrace();
-                Log.e("Excetion ", e.toString());
+                Log.e("Exception ", e.toString());
             }
         }
+
         return rootView;
     }
 

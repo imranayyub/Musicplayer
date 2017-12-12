@@ -14,6 +14,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/albumart"
+            android:layout_margin="5dp"
             android:src="@drawable/album_art"/>
 
         <LinearLayout
