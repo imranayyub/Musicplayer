@@ -31,32 +31,38 @@ MERGED from [com.android.support:support-core-ui:26.0.0-alpha1] C:\Users\Im\.and
 MERGED from [com.android.support:support-core-utils:26.0.0-alpha1] C:\Users\Im\.android\build-cache\e098ee3425be2995e9f1a45478534ae3a3183a30\output\AndroidManifest.xml:29:5-20
 MERGED from [com.android.support:support-compat:26.0.0-alpha1] C:\Users\Im\.android\build-cache\fb91081a67c6efe05bde57ad1b8ec2eaa870c32d\output\AndroidManifest.xml:29:5-20
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\Im\.android\build-cache\4306394085808d5966cd6c8862cdcfd1c3311c24\output\AndroidManifest.xml:9:5-20
+MERGED from [com.github.Raizlabs.DBFlow:dbflow:4.1.2] C:\Users\Im\.android\build-cache\0dd324dffc98c43049e6a78ad21a519a49e35c5e\output\AndroidManifest.xml:11:5-20
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-sqlcipher:4.1.2] C:\Users\Im\.android\build-cache\465130cf9bf4e36de9f01ca28fa996ea0d055eba\output\AndroidManifest.xml:11:5-20
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-rx:4.1.2] C:\Users\Im\.android\build-cache\c94624eca97163dcd70ae7410cee60018bde8adb\output\AndroidManifest.xml:10:5-20
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-rx2:4.1.2] C:\Users\Im\.android\build-cache\bf7aa4d5c6ada67361150042681b94eef254e6f3\output\AndroidManifest.xml:10:5-20
 	android:label
 		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:9:9-41
 	android:supportsRtl
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:11:9-35
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:12:9-35
 	android:roundIcon
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:10:9-54
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:11:9-54
 	android:allowBackup
 		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:7:9-35
 	android:icon
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:8:9-43
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:8:9-38
 	android:theme
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:12:9-40
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:13:9-40
+	android:name
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:10:9-42
 activity#com.example.im.music.MainActivity
-ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:13:9-22:20
+ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:14:9-22:20
 	android:label
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:15:13-45
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:16:13-45
 	android:theme
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:16:13-56
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:17:13-56
 	android:name
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:14:13-41
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:15:13-41
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:17:13-21:29
+ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:18:13-21:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:18:17-69
+ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:19:17-69
 	android:name
-		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:18:25-66
+		ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:19:25-66
 category#android.intent.category.LAUNCHER
 ADDED from C:\Users\Im\AndroidStudioProjects\Music\app\src\main\AndroidManifest.xml:20:17-77
 	android:name
@@ -80,6 +86,10 @@ MERGED from [com.android.support:support-core-ui:26.0.0-alpha1] C:\Users\Im\.and
 MERGED from [com.android.support:support-core-utils:26.0.0-alpha1] C:\Users\Im\.android\build-cache\e098ee3425be2995e9f1a45478534ae3a3183a30\output\AndroidManifest.xml:21:5-23:61
 MERGED from [com.android.support:support-compat:26.0.0-alpha1] C:\Users\Im\.android\build-cache\fb91081a67c6efe05bde57ad1b8ec2eaa870c32d\output\AndroidManifest.xml:21:5-23:58
 MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\Im\.android\build-cache\4306394085808d5966cd6c8862cdcfd1c3311c24\output\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.Raizlabs.DBFlow:dbflow:4.1.2] C:\Users\Im\.android\build-cache\0dd324dffc98c43049e6a78ad21a519a49e35c5e\output\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-sqlcipher:4.1.2] C:\Users\Im\.android\build-cache\465130cf9bf4e36de9f01ca28fa996ea0d055eba\output\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-rx:4.1.2] C:\Users\Im\.android\build-cache\c94624eca97163dcd70ae7410cee60018bde8adb\output\AndroidManifest.xml:6:5-8:41
+MERGED from [com.github.Raizlabs.DBFlow:dbflow-rx2:4.1.2] C:\Users\Im\.android\build-cache\bf7aa4d5c6ada67361150042681b94eef254e6f3\output\AndroidManifest.xml:6:5-8:41
 	tools:overrideLibrary
 		ADDED from [com.android.support:design:26.0.0-alpha1] C:\Users\Im\.android\build-cache\4f933f91bf468b9a2a8fb7fb6d95932f29d43796\output\AndroidManifest.xml:23:9-59
 	android:targetSdkVersion

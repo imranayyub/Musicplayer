@@ -8,7 +8,7 @@
     tools:context="com.example.im.music.MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical"
-    android:background="@drawable/music">
+    android:background="#b2b2b2">
 
     <ListView
         android:layout_width="368dp"
@@ -24,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="60dp"
         android:elevation="70dp"
         android:id="@+id/play"
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="#91000000"
         android:background="@drawable/mybutton"
         android:text="Play"/>
 <Button
@@ -39,7 +39,7 @@
     android:layout_marginLeft="20dp"
     android:gravity="center"
     android:elevation="70dp"
-    style="@style/Widget.AppCompat.Button.Colored"
+    style="#91000000"
     android:background="@drawable/mybutton"
        />
     </LinearLayout>

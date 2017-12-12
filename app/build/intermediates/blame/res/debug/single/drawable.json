@@ -12,12 +12,12 @@
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_seekbar_track_material.xml"
     },
     {
-        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
-        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
-    },
-    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_fast_backward.png",
@@ -42,6 +42,10 @@
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\icon.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\icon.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\album_art.jpg",
@@ -84,6 +88,10 @@
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_dialog_material_background.xml"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\me.jpg",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\me.jpg"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
     },
@@ -94,6 +102,10 @@
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\play1.png",
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\play1.png"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\playbutton.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\playbutton.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
@@ -118,6 +130,14 @@
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\black.jpg",
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\black.jpg"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\gray.jpg",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\gray.jpg"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\search.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\search.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_play.png",
@@ -156,20 +176,20 @@
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_item_background_holo_light.xml"
     },
     {
-        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
-        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_textfield_search_material.xml"
-    },
-    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\music.jpg",
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\music.jpg"
     },
     {
-        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
-        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ic_search_api_material.xml"
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
+        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_textfield_search_material.xml"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
+        "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ic_search_api_material.xml"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
@@ -192,12 +212,16 @@
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\play.png"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_fast_forward.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\ic_action_fast_forward.png"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
-        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_fast_forward.png",
-        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\ic_action_fast_forward.png"
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\s1.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\s1.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\mybutton.xml",
