@@ -16,7 +16,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.im.music.R.layout.big_notification;
 
@@ -26,12 +29,7 @@ import static com.example.im.music.R.layout.big_notification;
 
 public class MyService extends Service {
     public static MediaPlayer player;
-    ArrayList songPath = new ArrayList<>();
-    ArrayList songName = new ArrayList<>();
-//        ArrayList songart = new ArrayList<>();
-    int position;
-//    int duration;
-    String albumArt;
+    int position, isSearch=0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -46,30 +44,45 @@ public class MyService extends Service {
         if (intent != null && intent.getExtras() != null) {
             if (player != null)
                 player.stop();
+            final List<SongDetails> songDetailses;
             //Extracting data from Intent.
             Bundle bundle = intent.getExtras();
-            songPath = bundle.getStringArrayList("SongList");
+            isSearch = bundle.getInt("search");
+            if (isSearch == 1) {
+                String songName = bundle.getString("songname");
+                songDetailses = SQLite.select().
+                        from(SongDetails.class).
+                        where(SongDetails_Table.name.like("%"+songName+"%")).
+                        queryList();
+                songDetailses.size();
+//                position=0;
+            }
+            else {
+                songDetailses = SQLite.select().
+                        from(SongDetails.class).
+                        queryList();
+                }
             position = bundle.getInt("position");
-            songName = bundle.getStringArrayList("SongName");
-            albumArt = bundle.getString("albumart");
 
-//            songart = bundle.getStringArrayList("songart");
-            Uri sing = Uri.parse((String) songPath.get(position)); //Converting String path into Uri.
+            SongDetails song = songDetailses.get(position);
+            Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
             player = MediaPlayer.create(this, sing);
             player.start();  //playing Song Using MediaPlayer.
-            createNotification(getApplicationContext(), (String) songName.get(position), albumArt);  //shows Notification each time new song is played.
+            createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
             //checks if the Songs is over(Here we play next Song if previous is over).
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer play) {
                     position++;
-                    if (position >= songPath.size())  //checks if it's last Song in the list.
+
+                    if (position >= songDetailses.size())  //checks if it's last Song in the list.
                         position = 0;
                     if (player != null)
                         player.stop();
-                    Uri sing = Uri.parse((String) songPath.get(position));
+                    SongDetails song = songDetailses.get(position);
+                    Uri sing = Uri.parse((String) song.getPath());
                     player = MediaPlayer.create(MyService.this, sing);
-                    createNotification(getApplicationContext(), (String) songName.get(position),  albumArt);  //shows Notification each time new song is played.
+                    createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
                     player.setOnCompletionListener(this);
                     player.start();
                 }
@@ -132,22 +145,14 @@ public class MyService extends Service {
         notificationCompat.addAction(R.id.btnDelete, "close", close);
         notificationCompat.setOngoing(true);
 
-//        notificationCompat.build().flags |= Notification.FLAG_NO_CLEAR |Notification.FLAG_ONGOING_EVENT;
-//          Button close=(Button)expandedView.findViewById(R.id.btnDelete);
-//        setListeners(expandedView, context);
-
 
         if (art != null && !art.equals("")) {
             byte[] imag = Base64.decode(art, Base64.DEFAULT);
             try {
                 Bitmap bmp = BitmapFactory.decodeByteArray(imag, 0, imag.length);
                 notificationCompat.getBigContentView().setImageViewBitmap(R.id.albumart, bmp);
-//                albumart.setImageBitmap(Bitmap.createScaledBitmap(bmp, width,
-//                        height, false));
             } catch (Exception e) {
                 e.printStackTrace();
-//                notificationCompat.getBigContentView().getLayoutParams().height = 120;
-//                image.getLayoutParams().width = 120;
                 notificationCompat.getBigContentView().setImageViewResource(R.id.albumart, R.drawable.album_art);
                 Log.e("Exception ", e.toString());
             }

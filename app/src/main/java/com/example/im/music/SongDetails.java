@@ -13,7 +13,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = Appdatabase.class)
 public class SongDetails extends BaseModel {
 
-    @PrimaryKey(autoincrement = true) // at least one primary key required
+    @PrimaryKey // at least one primary key required
             int id;
 
     @Column
@@ -106,4 +106,13 @@ public class SongDetails extends BaseModel {
     public  String getTitle() {
         return title;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
+
