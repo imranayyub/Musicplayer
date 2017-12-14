@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity
 //                    intent.putStringArrayListExtra("SongList", songPath);
 //                    intent.putStringArrayListExtra("SongName", songs);
                     bundle.putString("songname", name);
+                    bundle.putInt("position",position);
                     intent.putExtras(bundle);
                     startService(intent);
 
@@ -175,7 +176,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
+//            super.onCreate(bundle);
             super.onBackPressed();
         }
     }
@@ -253,8 +256,8 @@ public class MainActivity extends AppCompatActivity
 //                                intent.putStringArrayListExtra("SongList", songPath);
 //                                intent.putStringArrayListExtra("SongName", songs);
                                 bundle.putInt("position", position);
-                                bundle.putString("songname",search);
-                                bundle.putInt("search",1);
+                                bundle.putString("songname", search);
+                                bundle.putInt("search", 1);
                                 intent.putExtras(bundle);
                                 startService(intent);
 
@@ -321,7 +324,7 @@ public class MainActivity extends AppCompatActivity
 //                                    intent.putStringArrayListExtra("SongName", songs);
                                     bundle.putInt("position", position);
                                     intent.putExtras(bundle);
-                                    bundle.putInt("search",0);
+                                    bundle.putInt("search", 0);
                                     startService(intent);
 
                                 }
@@ -372,17 +375,148 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_playList) {
+            // Handle the PLayList
 
-        } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+            final ArrayList<String> songs = new ArrayList<>();
+            final ArrayList<String> songPath = new ArrayList<>();
+            final ArrayList<String> songArt = new ArrayList<>();
+            int i = 0;
+            List<PlayList> playLists = SQLite.select().
+                    from(PlayList.class)
+//                    .where(SongDetails_Table.name.like("%" + search + "%"))
+                    .queryList();
+            if (playLists.size() == 0) {
+                //Executing task in background(Updating Music Library).
+//                            (new MyTask()).execute();
+            } else {
+                for (PlayList s : playLists) {
+                    String fileName = s.getName();
+                    if (fileName == null)
+                        fileName = s.getTitle();
+                    String filePath = s.getPath();
+                    String songArts = s.getAlbumArt();
+                    //here you will get list of file name and file path that present in your device
+                    Log.i("file details ", " name =" + fileName + " path = " + filePath);
+                    songs.add(i, fileName);
+                    songPath.add(i, filePath);
+                    songArt.add(i, songArts);
+                    i++;
+                }
+            }
+            if(songArt.size()==0)
+            {
+                Toast.makeText(getApplicationContext(),"Add Songs to Playlist..",Toast.LENGTH_SHORT).show();
+            }
+            CustomAdapterforList adapter = new CustomAdapterforList(MainActivity.this, songArt, songs);
 
-        } else if (id == R.id.nav_share) {
+            // Assign adapter to ListView
+            playList.setAdapter(adapter);
+            registerForContextMenu(playList);
+//   Checks If item on ListView is Clicked And performs Required Function.
+            playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String name = (String) adapterView.getItemAtPosition(position);
+                    Toast.makeText(getApplicationContext(), "Playing : " + name, Toast.LENGTH_SHORT).show();
 
-        } else if (id == R.id.nav_send) {
+                    play.setText("Pause");
+                    Activated = 1;
+
+                    //Intent to Start Service(Service to play Music in Background).
+                    Intent intent = new Intent(MainActivity.this, MyService.class);
+//                                intent.putStringArrayListExtra("SongList", songPath);
+//                                intent.putStringArrayListExtra("SongName", songs);
+                    bundle.putInt("position", position);
+//                    bundle.putString("songname", );
+                    bundle.putInt("search", 2);
+                    intent.putExtras(bundle);
+                    startService(intent);
+
+                }
+            });
+
+
+            playList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String name = (String) adapterView.getItemAtPosition(position);
+                    setname(name);
+                    return false;
+                }
+            });
+
+
+        } else if (id == R.id.home) {
+//            onBackPressed();
+//            onRestart();
+            final ArrayList<String> songs = new ArrayList<>();
+            final ArrayList<String> songPath = new ArrayList<>();
+            final ArrayList<String> songArt = new ArrayList<>();
+            int i = 0;
+            List<SongDetails> songDetailses = SQLite.select().
+                    from(SongDetails.class).
+                    queryList();
+            if (songDetailses.size() == 0) {
+                //Executing task in background(Updating Music Library).
+                (new MyTask()).execute();
+            } else {
+                for (SongDetails s : songDetailses) {
+                    String fileName = s.getName();
+                    if (fileName == null)
+                        fileName = s.getTitle();
+                    String filePath = s.getPath();
+                    String songArts = s.getAlbumArt();
+                    //here you will get list of file name and file path that present in your device
+                    Log.i("file details ", " name =" + fileName + " path = " + filePath);
+                    songs.add(i, fileName);
+                    songPath.add(i, filePath);
+                    songArt.add(i, songArts);
+                    i++;
+                }
+                CustomAdapterforList adapter = new CustomAdapterforList(MainActivity.this, songArt, songs);
+
+                // Assign adapter to ListView
+                playList.setAdapter(adapter);
+                registerForContextMenu(playList);
+//   Checks If item on ListView is Clicked And performs Required Function.
+                playList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        String name = (String) adapterView.getItemAtPosition(position);
+                        Toast.makeText(getApplicationContext(), "Playing : " + name, Toast.LENGTH_SHORT).show();
+
+                        play.setText("Pause");
+                        Activated = 1;
+
+                        //Intent to Start Service(Service to play Music in Background).
+                        Intent intent = new Intent(MainActivity.this, MyService.class);
+//                    intent.putStringArrayListExtra("SongList", songPath);
+//                    intent.putStringArrayListExtra("SongName", songs);
+                        bundle.putString("songname", name);
+                        bundle.putInt("position",position);
+                        bundle.putInt("search",0);
+                        intent.putExtras(bundle);
+                        startService(intent);
+
+                    }
+                });
+
+
+                playList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        String name = (String) adapterView.getItemAtPosition(position);
+                        setname(name);
+                        return false;
+                    }
+                });
+
+            }
+
 
         }
 
@@ -467,7 +601,7 @@ public class MainActivity extends AppCompatActivity
 //                    intent.putStringArrayListExtra("SongList", songPath);
 //                    intent.putStringArrayListExtra("SongName", songs);
                     bundle.putInt("position", position);
-                    bundle.putInt("search",0);
+                    bundle.putInt("search", 0);
                     intent.putExtras(bundle);
                     startService(intent);
 
@@ -548,8 +682,26 @@ public class MainActivity extends AppCompatActivity
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Add to Playlist") {
             Toast.makeText(getApplicationContext(), "Adding to Playlist..", Toast.LENGTH_LONG).show();
+            PlayList playList = new PlayList();
+            String songname = getSongDetailName();
+            List<SongDetails> songDetailses = SQLite.select().
+                    from(SongDetails.class).where(SongDetails_Table.name.like(songname)).
+                    queryList();
+//        int size=songDetailses.size();
+            SongDetails song = songDetailses.get(0);
+            playList.setId(song.getId());
+            playList.setName(song.getName());
+            playList.setAlbum(song.getAlbum());
+            playList.setAlbumArt(song.getAlbumArt());
+            playList.setBitrate(song.getBitrate());
+            playList.setGenre(song.getGenre());
+            playList.setPath(song.getPath());
+            playList.setTitle(song.getTitle());
+            playList.save();
         } else if (item.getTitle() == "Details") {
             Toast.makeText(getApplicationContext(), "Song Details..", Toast.LENGTH_LONG).show();
+
+
             dialog.show(manager, "YourDialog");
         } else if (item.getTitle() == "Cancel") {
 
@@ -616,4 +768,5 @@ public class MainActivity extends AppCompatActivity
     public static String getSongDetailName() {
         return songDetailName;
     }
+
 }

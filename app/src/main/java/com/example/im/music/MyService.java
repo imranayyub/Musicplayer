@@ -45,6 +45,7 @@ public class MyService extends Service {
             if (player != null)
                 player.stop();
             final List<SongDetails> songDetailses;
+            final List<PlayList> playLists;
             //Extracting data from Intent.
             Bundle bundle = intent.getExtras();
             isSearch = bundle.getInt("search");
@@ -52,41 +53,122 @@ public class MyService extends Service {
                 String songName = bundle.getString("songname");
                 songDetailses = SQLite.select().
                         from(SongDetails.class).
-                        where(SongDetails_Table.name.like("%"+songName+"%")).
+                        where(SongDetails_Table.name.like("%" + songName + "%")).
                         queryList();
                 songDetailses.size();
 //                position=0;
+                position = bundle.getInt("position");
+                SongDetails song = songDetailses.get(position);
+                Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
+                player = MediaPlayer.create(this, sing);
+                player.start();  //playing Song Using MediaPlayer.
+                createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                //checks if the Songs is over(Here we play next Song if previous is over).
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer play) {
+                        position++;
+
+                        if (position >= songDetailses.size())  //checks if it's last Song in the list.
+                            position = 0;
+                        if (player != null)
+                            player.stop();
+                        SongDetails song = songDetailses.get(position);
+                        Uri sing = Uri.parse((String) song.getPath());
+                        player = MediaPlayer.create(MyService.this, sing);
+                        createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                        player.setOnCompletionListener(this);
+                        player.start();
+                    }
+                });
+
+
+
+            } else if (isSearch == 2)
+            {
+
+                playLists = SQLite.select().
+                        from(PlayList.class).
+                        queryList();
+                position = bundle.getInt("position");
+                PlayList song = playLists.get(position);
+                Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
+                player = MediaPlayer.create(this, sing);
+                player.start();  //playing Song Using MediaPlayer.
+                createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                //checks if the Songs is over(Here we play next Song if previous is over).
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer play) {
+                        position++;
+
+                        if (position >= playLists.size())  //checks if it's last Song in the list.
+                            position = 0;
+                        if (player != null)
+                            player.stop();
+                        PlayList song = playLists.get(position);
+                        Uri sing = Uri.parse((String) song.getPath());
+                        player = MediaPlayer.create(MyService.this, sing);
+                        createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                        player.setOnCompletionListener(this);
+                        player.start();
+                    }
+                });
             }
             else {
                 songDetailses = SQLite.select().
                         from(SongDetails.class).
                         queryList();
-                }
-            position = bundle.getInt("position");
+                position = bundle.getInt("position");
+                SongDetails song = songDetailses.get(position);
+                Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
+                player = MediaPlayer.create(this, sing);
+                player.start();  //playing Song Using MediaPlayer.
+                createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                //checks if the Songs is over(Here we play next Song if previous is over).
+                player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer play) {
+                        position++;
 
-            SongDetails song = songDetailses.get(position);
-            Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
-            player = MediaPlayer.create(this, sing);
-            player.start();  //playing Song Using MediaPlayer.
-            createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
-            //checks if the Songs is over(Here we play next Song if previous is over).
-            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer play) {
-                    position++;
-
-                    if (position >= songDetailses.size())  //checks if it's last Song in the list.
-                        position = 0;
-                    if (player != null)
-                        player.stop();
-                    SongDetails song = songDetailses.get(position);
-                    Uri sing = Uri.parse((String) song.getPath());
-                    player = MediaPlayer.create(MyService.this, sing);
-                    createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
-                    player.setOnCompletionListener(this);
-                    player.start();
+                        if (position >= songDetailses.size())  //checks if it's last Song in the list.
+                            position = 0;
+                        if (player != null)
+                            player.stop();
+                        SongDetails song = songDetailses.get(position);
+                        Uri sing = Uri.parse((String) song.getPath());
+                        player = MediaPlayer.create(MyService.this, sing);
+                        createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+                        player.setOnCompletionListener(this);
+                        player.start();
+                    }
+                });
                 }
-            });
+//            position = bundle.getInt("position");
+//
+//            SongDetails song = songDetailses.get(position);
+//            Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
+//            player = MediaPlayer.create(this, sing);
+//            player.start();  //playing Song Using MediaPlayer.
+//            createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+//            checks if the Songs is over(Here we play next Song if previous is over).
+//            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                @Override
+//                public void onCompletion(MediaPlayer play) {
+//                    position++;
+//
+//                    if (position >= songDetailses.size())  //checks if it's last Song in the list.
+//                        position = 0;
+//                    if (player != null)
+//                        player.stop();
+//                    SongDetails song = songDetailses.get(position);
+//                    Uri sing = Uri.parse((String) song.getPath());
+//                    player = MediaPlayer.create(MyService.this, sing);
+//                    createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
+//                    player.setOnCompletionListener(this);
+//                    player.start();
+//                }
+//            });
         }
         return START_STICKY;
     }
@@ -106,6 +188,8 @@ public class MyService extends Service {
         super.onDestroy();
         if (player != null)
             player.stop();
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancelAll();
 
     }
 
