@@ -11,9 +11,12 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.SyncStateContract;
+import android.support.transition.Visibility;
 import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -21,6 +24,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.drm.DrmStore.Action.PLAY;
 import static com.example.im.music.R.layout.big_notification;
 
 /**
@@ -29,7 +33,12 @@ import static com.example.im.music.R.layout.big_notification;
 
 public class MyService extends Service {
     public static MediaPlayer player;
-    int position, isSearch=0;
+   static int position, isSearch = 0;
+    public static final String NOTIFY_PLAY = "com.example.im.music.play";
+    public static final String NOTIFY_PREVIOUS = "com.example.im.music.previous";
+    public static final String NOTIFY_DELETE = "com.example.im.music.delete";
+    public static final String NOTIFY_PAUSE = "com.example.im.music.pause";
+    public static final String NOTIFY_NEXT = "com.example.im.music.next";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,6 +67,11 @@ public class MyService extends Service {
                 songDetailses.size();
 //                position=0;
                 position = bundle.getInt("position");
+                if (position >= songDetailses.size())  //checks if it's last Song in the list.
+                    position = 0;
+                if(position==-1)
+                    position=songDetailses.size()-1;
+                setCurrentPosition(position);
                 SongDetails song = songDetailses.get(position);
                 Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
                 player = MediaPlayer.create(this, sing);
@@ -73,6 +87,7 @@ public class MyService extends Service {
                             position = 0;
                         if (player != null)
                             player.stop();
+                        setCurrentPosition(position);
                         SongDetails song = songDetailses.get(position);
                         Uri sing = Uri.parse((String) song.getPath());
                         player = MediaPlayer.create(MyService.this, sing);
@@ -83,14 +98,17 @@ public class MyService extends Service {
                 });
 
 
-
-            } else if (isSearch == 2)
-            {
+            } else if (isSearch == 2) {
 
                 playLists = SQLite.select().
                         from(PlayList.class).
                         queryList();
                 position = bundle.getInt("position");
+                if (position >= playLists.size())  //checks if it's last Song in the list.
+                    position = 0;
+                if(position==-1)
+                    position=playLists.size()-1;
+                setCurrentPosition(position);
                 PlayList song = playLists.get(position);
                 Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
                 player = MediaPlayer.create(this, sing);
@@ -106,6 +124,7 @@ public class MyService extends Service {
                             position = 0;
                         if (player != null)
                             player.stop();
+                        setCurrentPosition(position);
                         PlayList song = playLists.get(position);
                         Uri sing = Uri.parse((String) song.getPath());
                         player = MediaPlayer.create(MyService.this, sing);
@@ -114,12 +133,16 @@ public class MyService extends Service {
                         player.start();
                     }
                 });
-            }
-            else {
+            } else {
                 songDetailses = SQLite.select().
                         from(SongDetails.class).
                         queryList();
                 position = bundle.getInt("position");
+                if (position >= songDetailses.size())  //checks if it's last Song in the list.
+                    position = 0;
+                if(position==-1)
+                    position=songDetailses.size()-1;
+                setCurrentPosition(position);
                 SongDetails song = songDetailses.get(position);
                 Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
                 player = MediaPlayer.create(this, sing);
@@ -135,6 +158,7 @@ public class MyService extends Service {
                             position = 0;
                         if (player != null)
                             player.stop();
+                        setCurrentPosition(position);
                         SongDetails song = songDetailses.get(position);
                         Uri sing = Uri.parse((String) song.getPath());
                         player = MediaPlayer.create(MyService.this, sing);
@@ -143,32 +167,7 @@ public class MyService extends Service {
                         player.start();
                     }
                 });
-                }
-//            position = bundle.getInt("position");
-//
-//            SongDetails song = songDetailses.get(position);
-//            Uri sing = Uri.parse((String) song.getPath()); //Converting String path into Uri.
-//            player = MediaPlayer.create(this, sing);
-//            player.start();  //playing Song Using MediaPlayer.
-//            createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
-//            checks if the Songs is over(Here we play next Song if previous is over).
-//            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                @Override
-//                public void onCompletion(MediaPlayer play) {
-//                    position++;
-//
-//                    if (position >= songDetailses.size())  //checks if it's last Song in the list.
-//                        position = 0;
-//                    if (player != null)
-//                        player.stop();
-//                    SongDetails song = songDetailses.get(position);
-//                    Uri sing = Uri.parse((String) song.getPath());
-//                    player = MediaPlayer.create(MyService.this, sing);
-//                    createNotification(getApplicationContext(), (String) song.getName(), song.getAlbumArt());  //shows Notification each time new song is played.
-//                    player.setOnCompletionListener(this);
-//                    player.start();
-//                }
-//            });
+            }
         }
         return START_STICKY;
     }
@@ -197,6 +196,7 @@ public class MyService extends Service {
     public static void pause() {
         if (player.isPlaying()) {
             player.pause();
+
         }
     }
 
@@ -207,16 +207,16 @@ public class MyService extends Service {
         }
     }
 
+
     public static final int NOTIFICATION_ID_CUSTOM_BIG = 9;
 
     public void createNotification(Context context, String name, String art) {
         RemoteViews expandedView = new RemoteViews(context.getPackageName(), big_notification);
+
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notifyIntent = new Intent(context, MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pause = PendingIntent.getActivity(context, 0, notifyIntent, 0);
-        PendingIntent close = PendingIntent.getActivity(context, 0, notifyIntent, 0);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationCompat.setContentIntent(pendingIntent);
         notificationCompat.setSmallIcon(R.drawable.ic_action_play);
@@ -225,10 +225,22 @@ public class MyService extends Service {
         notificationCompat.setContentTitle("Music Player");
         notificationCompat.setContentText("Control Audio");
         notificationCompat.getBigContentView().setTextViewText(R.id.textSongName, name);
-        notificationCompat.addAction(R.id.btnPause, "Pause", pause);
-        notificationCompat.addAction(R.id.btnDelete, "close", close);
         notificationCompat.setOngoing(true);
-
+        notificationCompat.setOnlyAlertOnce(true);
+        setListeners(expandedView, context);
+//         int playorpause=HandleNotificationIntent.getplayorpause();
+//        if(playorpause==0)
+//        {
+//            expandedView.setViewVisibility(R.id.btnPause, View.VISIBLE);
+//            expandedView.setViewVisibility(R.id.btnPlay, View.INVISIBLE);
+//
+//        }
+//        if(playorpause==1)
+//        {
+//            expandedView.setViewVisibility(R.id.btnPause, View.INVISIBLE);
+//            expandedView.setViewVisibility(R.id.btnPlay, View.VISIBLE);
+//
+//        }
 
         if (art != null && !art.equals("")) {
             byte[] imag = Base64.decode(art, Base64.DEFAULT);
@@ -247,4 +259,40 @@ public class MyService extends Service {
 
 
     }
+//    int isPause=0;
+    public void setListeners(RemoteViews view, Context context) {
+
+//        Intent notificationIntent = new Intent(this, HandleNotificationIntent.class);
+//        notificationIntent.putExtra("id","0");
+
+        Intent previous = new Intent(NOTIFY_PREVIOUS);
+        Intent delete = new Intent(NOTIFY_DELETE);
+        Intent pause = new Intent(NOTIFY_PAUSE);
+        Intent next = new Intent(NOTIFY_NEXT);
+        Intent play = new Intent(NOTIFY_PLAY);
+
+        PendingIntent pPause = PendingIntent.getBroadcast(context, 0, pause, PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.btnPause, pPause);
+
+        PendingIntent pPlay = PendingIntent.getBroadcast(this, 0, play, PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.btnPlay, pPlay);
+
+        PendingIntent pNext = PendingIntent.getBroadcast(context, 0, next, PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.btnNext, pNext);
+
+        PendingIntent pPrevious = PendingIntent.getBroadcast(context, 0, previous, PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.btnPrevious, pPrevious);
+
+        PendingIntent pDelete = PendingIntent.getBroadcast(context, 0, delete, PendingIntent.FLAG_UPDATE_CURRENT);
+        view.setOnClickPendingIntent(R.id.btnDelete, pDelete);
+    }
+
+    public void setCurrentPosition(int currentPosition) {
+        this.position = currentPosition;
+    }
+
+    public static int getCurrrentPosition() {
+        return position;
+    }
+
 }

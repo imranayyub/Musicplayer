@@ -64,6 +64,10 @@
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\cool.png"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\homeicon.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\homeicon.png"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\side_nav_bar.xml",
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\side_nav_bar.xml"
     },
@@ -120,6 +124,10 @@
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\f2.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\f2.png"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_btn_radio_material.xml"
     },
@@ -136,8 +144,16 @@
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\gray.jpg"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ppp.jpg",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\ppp.jpg"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\search.png",
         "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\search.png"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\f1.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\f1.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_action_play.png",
@@ -170,6 +186,10 @@
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\4f933f91bf468b9a2a8fb7fb6d95932f29d43796\\output\\res\\drawable\\design_snackbar_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\pp.jpg",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\pp.jpg"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
@@ -250,6 +270,10 @@
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\playpause.png",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\drawable\\playpause.png"
     },
     {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\music1.jpg",

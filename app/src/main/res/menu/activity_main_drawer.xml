@@ -12,6 +12,11 @@
             android:icon="@android:drawable/stat_sys_headset"
             android:title="PlayList" />
 
+        <item
+            android:id="@+id/onlinePlaylist"
+            android:title="Online Playlist"
+            android:icon="@android:drawable/stat_sys_headset"/>
+
     </group>
 
 

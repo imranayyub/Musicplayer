@@ -8,6 +8,7 @@
         android:minSdkVersion="15"
         android:targetSdkVersion="26" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <meta-data
@@ -34,6 +35,16 @@
         </activity>
 
         <service android:name="com.example.im.music.MyService" />
+
+        <receiver android:name="com.example.im.music.HandleNotificationIntent" >
+            <intent-filter>
+                <action android:name="com.example.im.music.previous" />
+                <action android:name="com.example.im.music.delete" />
+                <action android:name="com.example.im.music.pause" />
+                <action android:name="com.example.im.music.next" />
+                <action android:name="com.example.im.music.play" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

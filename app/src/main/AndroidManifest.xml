@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.im.music">
-
+<uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
@@ -21,6 +21,15 @@
             </intent-filter>
         </activity>
         <service android:name=".MyService" />
-    </application>
+        <receiver android:name=".HandleNotificationIntent">
+        <intent-filter>
+            <action android:name="com.example.im.music.previous" />
+            <action android:name="com.example.im.music.delete" />
+            <action android:name="com.example.im.music.pause" />
+            <action android:name="com.example.im.music.next" />
+            <action android:name="com.example.im.music.play" />
+        </intent-filter>
+    </receiver>
+</application>
 
 </manifest>

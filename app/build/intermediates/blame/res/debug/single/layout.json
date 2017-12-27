@@ -148,6 +148,10 @@
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\layout\\select_dialog_singlechoice_material.xml"
     },
     {
+        "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\layout\\onlineplaylist.xml",
+        "source": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\src\\main\\res\\layout\\onlineplaylist.xml"
+    },
+    {
         "merged": "C:\\Users\\Im\\AndroidStudioProjects\\Music\\app\\build\\intermediates\\res\\merged\\debug\\layout\\abc_alert_dialog_title_material.xml",
         "source": "C:\\Users\\Im\\.android\\build-cache\\132febc4e4b253028a97422b9febaff203069014\\output\\res\\layout\\abc_alert_dialog_title_material.xml"
     },

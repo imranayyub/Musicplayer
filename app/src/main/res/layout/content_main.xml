@@ -8,7 +8,8 @@
     tools:context="com.example.im.music.MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical"
-    android:background="#b2b2b2">
+    android:background="#b2b2b2"
+    android:id="@+id/main">
 
     <ListView
         android:layout_width="368dp"
